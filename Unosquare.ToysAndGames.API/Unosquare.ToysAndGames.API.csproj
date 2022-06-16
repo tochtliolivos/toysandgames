@@ -18,13 +18,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DBService\DBService.csproj" />
-    <ProjectReference Include="..\Models\Models.csproj" />
-    <ProjectReference Include="..\Services\Services.csproj" />
+    <ProjectReference Include="..\Unosquare.ToysAndGames.DBService\Unosquare.ToysAndGames.DBService.csproj" />
+    <ProjectReference Include="..\Unosquare.ToysAndGames.Models\Unosquare.ToysAndGames.Models.csproj" />
+    <ProjectReference Include="..\Unosquare.ToysAndGames.Services\Unosquare.ToysAndGames.Services.csproj" />
   </ItemGroup>
 	
   <ItemGroup>
-	<InternalsVisibleTo Include ="ToysAndGamesTest"/>
+	<InternalsVisibleTo Include="ToysAndGamesTest" />
   </ItemGroup>
 
 </Project>

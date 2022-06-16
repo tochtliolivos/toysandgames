@@ -1,4 +1,4 @@
-﻿namespace DBService.Entities
+﻿namespace Unosquare.ToysAndGames.DBService.Entities
 {
     public class Product
     {

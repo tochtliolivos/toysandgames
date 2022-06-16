@@ -1,11 +1,6 @@
-﻿using Models.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Unosquare.ToysAndGames.Models.Dtos;
 
-namespace Models.Contracts
+namespace Unosquare.ToysAndGames.Models.Contracts
 {
     public interface IToysAndGamesService
     {

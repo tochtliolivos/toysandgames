@@ -26,9 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Models\Models.csproj" />
-    <ProjectReference Include="..\Services\Services.csproj" />
-    <ProjectReference Include="..\ToysAndGames\ToysAndGames.csproj" />
+    <ProjectReference Include="..\Unosquare.ToysAndGames.Models\Unosquare.ToysAndGames.Models.csproj" />
+    <ProjectReference Include="..\Unosquare.ToysAndGames.Services\Unosquare.ToysAndGames.Services.csproj" />
+    <ProjectReference Include="..\Unosquare.ToysAndGames.API\Unosquare.ToysAndGames.API.csproj" />
   </ItemGroup>
 
 </Project>
