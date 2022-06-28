@@ -1,13 +1,8 @@
 ﻿using AutoMapper;
-using Models.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DBService.Entities;
+using Unosquare.ToysAndGames.DBService.Entities;
+using Unosquare.ToysAndGames.Models.Dtos;
 
-namespace Services
+namespace Unosquare.ToysAndGames.Services
 {
     public class MapperConfig : Profile
     {

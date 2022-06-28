@@ -1,12 +1,12 @@
-using Services;
 using Moq;
 using Microsoft.EntityFrameworkCore;
-using DBService;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
-using DBService.Entities;
-using Models.Models;
 using Moq.EntityFrameworkCore;
+using Unosquare.ToysAndGames.DBService.Entities;
+using Unosquare.ToysAndGames.Models.Dtos;
+using Unosquare.ToysAndGames.DBService;
+using Unosquare.ToysAndGames.Services;
 
 namespace ToysAndGamesTest
 {

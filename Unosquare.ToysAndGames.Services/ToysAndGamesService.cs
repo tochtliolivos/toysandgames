@@ -1,17 +1,12 @@
 ﻿using AutoMapper;
-using DBService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Models.Contracts;
-using Models.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DBService.Entities;
+using Unosquare.ToysAndGames.Models.Contracts;
+using Unosquare.ToysAndGames.Models.Dtos;
+using Unosquare.ToysAndGames.DBService.Entities;
+using Unosquare.ToysAndGames.DBService;
 
-namespace Services
+namespace Unosquare.ToysAndGames.Services
 {
     public class ToysAndGamesService : IToysAndGamesService
     {

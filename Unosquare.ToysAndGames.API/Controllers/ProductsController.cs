@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Models.Contracts;
-using Models.Models;
-using Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using Unosquare.ToysAndGames.Models.Contracts;
+using Unosquare.ToysAndGames.Models.Dtos;
 
-namespace ToysAndGames.Controllers
+namespace UnosquareToysAndGames.API.Controllers
 {    
     [Route("api/[controller]")]
     [ApiController]
@@ -34,7 +31,8 @@ namespace ToysAndGames.Controllers
 
                 if (_toysAndGamesService.CreateProduct(product))
                     return StatusCode(StatusCodes.Status201Created);
-                
+                return StatusCode(StatusCodes.Status500InternalServerError);
+
             }
             catch (Exception ex)
             {

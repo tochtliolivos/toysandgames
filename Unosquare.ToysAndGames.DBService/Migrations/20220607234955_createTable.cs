@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace DBService.Migrations
+namespace Unosquare.ToysAndGames.DBService.Migrations
 {
     public partial class createTable : Migration
     {

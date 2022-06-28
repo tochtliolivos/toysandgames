@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Models.Models
+namespace Unosquare.ToysAndGames.Models.Dtos
 {
     //TODO: Use record instead of Class for DTOS
     public record ProductDto

@@ -1,7 +1,7 @@
-using DBService;
 using Microsoft.EntityFrameworkCore;
-using Models.Contracts;
-using Services;
+using Unosquare.ToysAndGames.DBService;
+using Unosquare.ToysAndGames.Models.Contracts;
+using Unosquare.ToysAndGames.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;

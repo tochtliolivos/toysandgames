@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToysAndGames", "ToysAndGames\ToysAndGames.csproj", "{A0B787BA-3E4B-499E-ADAA-3932EE0E46D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unosquare.ToysAndGames.API", "Unosquare.ToysAndGames.API\Unosquare.ToysAndGames.API.csproj", "{A0B787BA-3E4B-499E-ADAA-3932EE0E46D0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{0243CEE6-A5F8-4D1F-8BC2-38572D42C22A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unosquare.ToysAndGames.Models", "Unosquare.ToysAndGames.Models\Unosquare.ToysAndGames.Models.csproj", "{0243CEE6-A5F8-4D1F-8BC2-38572D42C22A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{D23E7A0E-6BE2-4589-B896-88ABD7EA0F7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unosquare.ToysAndGames.Services", "Unosquare.ToysAndGames.Services\Unosquare.ToysAndGames.Services.csproj", "{D23E7A0E-6BE2-4589-B896-88ABD7EA0F7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToysAndGamesTest", "ToysAndGamesTest\ToysAndGamesTest.csproj", "{5A530993-CB42-4187-B687-DAFD06CF08F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unosquare.ToysAndGamesTest", "Unosquare.ToysAndGamesTest\Unosquare.ToysAndGamesTest.csproj", "{5A530993-CB42-4187-B687-DAFD06CF08F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBService", "DBService\DBService.csproj", "{70021076-62D2-48BE-9970-D7238CAC1692}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unosquare.ToysAndGames.DBService", "Unosquare.ToysAndGames.DBService\Unosquare.ToysAndGames.DBService.csproj", "{70021076-62D2-48BE-9970-D7238CAC1692}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

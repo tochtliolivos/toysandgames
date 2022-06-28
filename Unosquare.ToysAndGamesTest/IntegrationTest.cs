@@ -1,12 +1,9 @@
-﻿using DBService;
-using DBService.Entities;
-using Microsoft.AspNetCore.Hosting;
-using Models.Models;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Json;
+using Unosquare.ToysAndGames.Models.Dtos;
 using Xunit.Abstractions;
 using Newtonsoft.Json;
-using ToysAndGamesTest.Extensions;
+using Unosquare.ToysAndGamesTest.Extensions;
 
 namespace ToysAndGamesTest
 {

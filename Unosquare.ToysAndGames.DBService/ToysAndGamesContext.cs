@@ -1,8 +1,8 @@
-﻿using DBService.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Unosquare.ToysAndGames.DBService.Entities;
 using System.Reflection;
 
-namespace DBService
+namespace Unosquare.ToysAndGames.DBService
 {
     public class ToysAndGamesContext : DbContext
     {
