@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Models.Models
 {
-    public class ProductDto
+    //TODO: Use record instead of Class for DTOS
+    public record ProductDto
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required] //TODO: on DTOs lets try to use FluentValidations instead of DataAnnotations
         public string Name { get; set; }
 
         [Required]
@@ -24,7 +25,7 @@ namespace Models.Models
         public string Company { get; set; }
 
         [Required]
-        [Range(1,1000)]
+        [Range(1,1000)] //TODO: this one cant be converted to fluentValudation Where or FluentAPI restriction, still we could create the CK_Constraint Manually.
         public decimal Price { get; set; }
     }
 }

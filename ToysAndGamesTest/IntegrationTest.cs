@@ -4,29 +4,49 @@ using Microsoft.AspNetCore.Hosting;
 using Models.Models;
 using System.Net;
 using System.Net.Http.Json;
+using Xunit.Abstractions;
+using Newtonsoft.Json;
+using ToysAndGamesTest.Extensions;
 
 namespace ToysAndGamesTest
 {
     public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
+        private readonly ITestOutputHelper _output;
         private readonly CustomWebApplicationFactory<Program> _factory;
 
-        public IntegrationTest(CustomWebApplicationFactory<Program> factory)
+        public IntegrationTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper output)
         {
             _factory = factory;
             _client = _factory.CreateClient();
+            _output = output;
         }
 
         [Fact]
         public async void GetAllProducts()
         {
-            //Act
-            var response = await _client.GetAsync("api/Products");
+            try
+            {
+                //Act
+                var response = await _client.GetAsync("api/Products");
 
-            //Assert
-            response.EnsureSuccessStatusCode();
-            Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
+                //Assert
+
+                Assert.True(response.IsSuccessStatusCode);
+                //TODO: We are evaluatiing that the response is a JSON but not if the JSON has information.
+                //TODO: Assert should be that the products are not null at least, that the reponse was in the 200 range, etc., 
+                Assert.NotNull(response);
+                Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
+                //Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                Assert.NotNull(responseContent);
+                _output.WriteLine(responseContent.AsJson());
+            }
+            catch (Exception ex)
+            {
+                Assert.False(true, $"Status code was not success: {ex.Message}");
+            }
         }
 
         [Fact]
@@ -46,7 +66,15 @@ namespace ToysAndGamesTest
             var response = await _client.PostAsJsonAsync("api/Products", product);
 
             //Assert
+            //TODO: Missing Assert.IsTrue response.IsSuccessStatusCode or 
+            //Assert.IsTrue(response.IsSuccessStatusCode)
+            //Or checking if doesnt throw an exception via Record.Exception 
+            //https://peterdaugaardrasmussen.com/2019/10/27/xunit-how-to-check-if-a-call-does-not-throw-an-exception/
+            //var exception = Record.Exception(() => response.EnsureSuccessStatusCode());
+            //Assert.Null(exception)
             response.EnsureSuccessStatusCode();
+
+            //TODO: There is no assertion here
         }
 
         [Fact]
@@ -76,7 +104,7 @@ namespace ToysAndGamesTest
             };
 
             var response = await _client.PutAsJsonAsync("api/Products", product);
-
+            //TODO: Same here as the GOTO: Ln 50
             response.EnsureSuccessStatusCode();
         }
 

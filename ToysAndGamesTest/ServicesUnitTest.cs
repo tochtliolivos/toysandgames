@@ -13,8 +13,12 @@ namespace ToysAndGamesTest
     public class ServicesUnitTest
     {
         [Fact]
+        //TODO: Review Fixture Class
+        //TODO: Review Trait
         public void GetAllProducts_RetunsProduct()
         {
+            //TODO: What is this test, testing? 
+
             //Arrange
             var data = new List<Product>{ new Product (), new Product () };
             var dtos = new List<ProductDto>{ new ProductDto(), new ProductDto()};
@@ -48,6 +52,7 @@ namespace ToysAndGamesTest
         }
 
         [Fact]
+        [Trait("Product", "Negative Testing")]
         public void GetAllProducts_WithError()
         {
             //Arrange
@@ -65,6 +70,7 @@ namespace ToysAndGamesTest
 
             //Assert
             Assert.Empty(products);
+          
         }
 
         [Fact]
@@ -91,6 +97,7 @@ namespace ToysAndGamesTest
         }
 
         [Fact]
+        [Trait("Product", "Negative Testing")]
         public void CreateProduct_WithError()
         {
             //Arrange            
@@ -116,7 +123,7 @@ namespace ToysAndGamesTest
         [Theory]
         [InlineData(1)]
         [InlineData(2)]
-        public void Delete_prtoducts_ok(int id)
+        public void Delete_Products_Ok(int id)
         {
             //Assert
             var data = new List<Product> { new Product { Id = 1 }, new Product { Id = 2 } };            

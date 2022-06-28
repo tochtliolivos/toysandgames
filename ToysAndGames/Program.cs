@@ -13,6 +13,7 @@ builder.Services.AddDbContext<ToysAndGamesContext>(options =>
         configuration.GetConnectionString("ToysAndGamesConnection")
         ));
 builder.Services.AddAutoMapper(typeof(MapperConfig));
+//TODO: Move this to the service layer and create an static method that add thems
 builder.Services.AddScoped<IToysAndGamesService, ToysAndGamesService>();
 
 builder.Services.AddControllers();

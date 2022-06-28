@@ -55,6 +55,7 @@ namespace ToysAndGamesTest
             db.SaveChanges();
         }
 
+        //TODO: Is this being used? 
         internal static void ReinitializeDbForTests(ToysAndGamesContext db)
         {
             db.Products.RemoveRange(db.Products);
