@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Unosquare.ToysAndGames.DBService;
 using Unosquare.ToysAndGames.DBService.Entities;
 
-namespace ToysAndGamesTest
+namespace Unosquare.ToysAndGamesTest.Fixtures
 {
     public class CustomWebApplicationFactory<T> : WebApplicationFactory<T> where T : class
     {
@@ -15,8 +15,7 @@ namespace ToysAndGamesTest
             builder.ConfigureServices(services =>
             {
                 var descriptor = services.SingleOrDefault(
-                    d => d.ServiceType ==
-                typeof(DbContextOptions<ToysAndGamesContext>));
+                    d => d.ServiceType == typeof(DbContextOptions<ToysAndGamesContext>));
 
                 services.Remove(descriptor);
                 services.AddDbContext<ToysAndGamesContext>(options =>
@@ -28,19 +27,20 @@ namespace ToysAndGamesTest
                 var scopedServices = scope.ServiceProvider;
 
                 var db = scopedServices.GetRequiredService<ToysAndGamesContext>();
+
                 using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
-                    .SetMinimumLevel(LogLevel.Trace)
-                .AddConsole());
+                    .SetMinimumLevel(LogLevel.Trace).AddConsole());
+
                 ILogger logger = loggerFactory.CreateLogger<Program>();
                 try
                 {
                     db.Database.EnsureCreated();
-                    InitializeDbForTests(db);
+                    ReinitializeDbForTests(db);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     logger.LogError("Error with seed information: " + e.Message);
-                }                
+                }
             });
         }
 
@@ -50,7 +50,6 @@ namespace ToysAndGamesTest
             db.SaveChanges();
         }
 
-        //TODO: Is this being used? 
         internal static void ReinitializeDbForTests(ToysAndGamesContext db)
         {
             db.Products.RemoveRange(db.Products);
@@ -61,11 +60,21 @@ namespace ToysAndGamesTest
         {
             return new List<Product>()
             {
-                new Product(){ 
+                new Product()
+                {
                     Id=1,
                     Name = "test1",
                     Description = "Description1",
-                    Company ="a",
+                    CompanyId =1,
+                    AgeRestriction = 20,
+                    Price = 101.0M
+                },
+                new Product()
+                {
+                    Id=2,
+                    Name = "test1",
+                    Description = "Description1",
+                    CompanyId =2,
                     AgeRestriction = 20,
                     Price = 101.0M
                 }

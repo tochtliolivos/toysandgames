@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Unosquare.ToysAndGames.DBService;
 
 #nullable disable
 
@@ -20,7 +21,37 @@ namespace Unosquare.ToysAndGames.DBService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("DBService.Entities.Product", b =>
+            modelBuilder.Entity("Unosquare.ToysAndGames.DBService.Entities.Company", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Companies");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Mattel"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Hasbro"
+                        });
+                });
+
+            modelBuilder.Entity("Unosquare.ToysAndGames.DBService.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,10 +62,8 @@ namespace Unosquare.ToysAndGames.DBService.Migrations
                     b.Property<int>("AgeRestriction")
                         .HasColumnType("int");
 
-                    b.Property<string>("Company")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -51,6 +80,8 @@ namespace Unosquare.ToysAndGames.DBService.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CompanyId");
+
                     b.ToTable("Products");
 
                     b.HasData(
@@ -58,7 +89,7 @@ namespace Unosquare.ToysAndGames.DBService.Migrations
                         {
                             Id = 1,
                             AgeRestriction = 12,
-                            Company = "Mattel",
+                            CompanyId = 1,
                             Description = "lorem ipsum dolor",
                             Name = "Barbie Developer",
                             Price = 300.00m
@@ -67,7 +98,7 @@ namespace Unosquare.ToysAndGames.DBService.Migrations
                         {
                             Id = 2,
                             AgeRestriction = 15,
-                            Company = "Mattel",
+                            CompanyId = 1,
                             Description = "Pista con dos coches etc",
                             Name = "Pista Hotweels",
                             Price = 650.00m
@@ -76,11 +107,27 @@ namespace Unosquare.ToysAndGames.DBService.Migrations
                         {
                             Id = 3,
                             AgeRestriction = 99,
-                            Company = "Hasbro",
+                            CompanyId = 2,
                             Description = "Juego de mesa para dos personas",
                             Name = "Adivina quien",
                             Price = 250.00m
                         });
+                });
+
+            modelBuilder.Entity("Unosquare.ToysAndGames.DBService.Entities.Product", b =>
+                {
+                    b.HasOne("Unosquare.ToysAndGames.DBService.Entities.Company", "Company")
+                        .WithMany("Products")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("Unosquare.ToysAndGames.DBService.Entities.Company", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

@@ -4,9 +4,9 @@ namespace Unosquare.ToysAndGames.Models.Contracts
 {
     public interface IToysAndGamesService
     {
-        public IEnumerable<ProductDto> GetAllProducts();
-        public bool CreateProduct(ProductDto product);
-        public bool UpdateProduct(ProductDto product);
-        public bool DeleteProduct(int id);
+        public Task<IEnumerable<ProductDto>> GetAllProducts();
+        public Task<ProductDto> CreateProduct(ProductDto product);
+        public Task<ProductDto> UpdateProduct(ProductDto product);
+        public Task<bool> DeleteProduct(int id);
     }
 }

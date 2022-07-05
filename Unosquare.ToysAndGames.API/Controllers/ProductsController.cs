@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Unosquare.ToysAndGames.Models.Contracts;
 using Unosquare.ToysAndGames.Models.Dtos;
 
@@ -8,57 +9,78 @@ namespace UnosquareToysAndGames.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        //TODO: We need to catch errros
         private readonly IToysAndGamesService _toysAndGamesService;
+        private readonly ILogger<ProductsController> _logger;
+        public readonly IValidator<ProductDto> _dtoValidator;
 
-        public ProductsController(IToysAndGamesService toysAndGamesService)
+        public ProductsController(IToysAndGamesService toysAndGamesService, ILogger<ProductsController> logger, 
+            IValidator<ProductDto> validator)
         {
             _toysAndGamesService = toysAndGamesService;
+            _logger = logger;
+            _dtoValidator = validator;
         }
 
         [HttpGet]
-        public IActionResult GetProducts()
-        {
-            return Ok(_toysAndGamesService.GetAllProducts());
-        }
-
-        [HttpPost]
-        public IActionResult NewProduct([FromBody] ProductDto product)
+        public async Task<IActionResult> GetProducts()
         {
             try
             {
-                if (!ModelState.IsValid) return BadRequest();
-
-                if (_toysAndGamesService.CreateProduct(product))
-                    return StatusCode(StatusCodes.Status201Created);
+                return Ok(await _toysAndGamesService.GetAllProducts());
+            }
+            catch(Exception e)
+            {
+                _logger.LogError($"Error getting products: {e.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError);
+            }            
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> NewProduct([FromBody] ProductDto product)
+        {
+            try
+            {
+                if (!_dtoValidator.Validate(product).IsValid) return BadRequest();
+                var result = await _toysAndGamesService.CreateProduct(product);
+                return StatusCode(StatusCodes.Status201Created, result);
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Error creating product: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError);
-                //LOGS
             }
         }
 
         [HttpPut]
-        public IActionResult UpdateProduct([FromBody] ProductDto product)
+        public async Task<IActionResult> UpdateProduct([FromBody] ProductDto product)
         {
-            if(!ModelState.IsValid) return BadRequest();
-
-            if (_toysAndGamesService.UpdateProduct(product))
-                return Ok();
-            return StatusCode(StatusCodes.Status500InternalServerError);
+            try
+            {
+                if (!_dtoValidator.Validate(product).IsValid) return BadRequest();
+                var result = await _toysAndGamesService.UpdateProduct(product);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error updating product: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }                        
         }
 
         [HttpDelete]
-        public IActionResult DeleteProduct([FromQuery] int? id)
+        public async Task<IActionResult> DeleteProduct([FromQuery] int? id)
         {
-            //TODO: Lets move this to a nullable int.
-            if (id==null) return BadRequest();
-            if(_toysAndGamesService.DeleteProduct(id.Value))
-                return Ok();
-            return StatusCode(StatusCodes.Status500InternalServerError);
+            try
+            {
+                if (id is null) return BadRequest();
+                var result = await _toysAndGamesService.DeleteProduct(id.Value);
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Error deleting product: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

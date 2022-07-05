@@ -9,7 +9,7 @@ namespace Unosquare.ToysAndGames.Services
         public MapperConfig()
         {
             CreateMap<Product, ProductDto>();
-            CreateMap<ProductDto, Product>();
+            CreateMap<ProductDto, Product>();            
         }
     }
 }

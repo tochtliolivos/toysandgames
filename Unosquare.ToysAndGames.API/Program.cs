@@ -1,23 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Unosquare.ToysAndGames.DBService;
-using Unosquare.ToysAndGames.Models.Contracts;
 using Unosquare.ToysAndGames.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
-
-// Add services to the container.
-builder.Services.AddDbContext<ToysAndGamesContext>(options => 
-    options.UseSqlServer(
-        configuration.GetConnectionString("ToysAndGamesConnection")
-        ));
-builder.Services.AddAutoMapper(typeof(MapperConfig));
-//TODO: Move this to the service layer and create an static method that add thems
-builder.Services.AddScoped<IToysAndGamesService, ToysAndGamesService>();
+builder.Services.AddProductServiceDependencies(configuration);
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -44,7 +35,6 @@ catch (Exception e)
 }
 
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

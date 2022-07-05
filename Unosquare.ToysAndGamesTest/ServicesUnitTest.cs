@@ -7,158 +7,118 @@ using Unosquare.ToysAndGames.DBService.Entities;
 using Unosquare.ToysAndGames.Models.Dtos;
 using Unosquare.ToysAndGames.DBService;
 using Unosquare.ToysAndGames.Services;
+using Xunit.Abstractions;
+using Unosquare.ToysAndGamesTest.Fixtures;
 
-namespace ToysAndGamesTest
+namespace Unosquare.ToysAndGamesTest
 {
-    public class ServicesUnitTest
+    public class ServicesUnitTest : IClassFixture<ProductsFixture>
     {
-        [Fact]
-        //TODO: Review Fixture Class
-        //TODO: Review Trait
-        public void GetAllProducts_RetunsProduct()
+        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ProductsFixture _productFixture;
+        public ServicesUnitTest(ITestOutputHelper testOutputHelper, 
+            ProductsFixture productFixture)
         {
-            //TODO: What is this test, testing? 
+            _testOutputHelper = testOutputHelper;
+            _productFixture = productFixture;
+        }
 
+        [Fact]
+        public async void GetAllProducts_RetunsProduct()
+        {
             //Arrange
-            var data = new List<Product>{ new Product (), new Product () };
-            var dtos = new List<ProductDto>{ new ProductDto(), new ProductDto()};
-            var dataSet = GetQueryableMockDbSet(data);
-            var dbContextMock = new Mock<ToysAndGamesContext>();
-            dbContextMock.Setup(p => p.Products).ReturnsDbSet(dataSet.Object);
-
-            var loggerMock = new Mock<ILogger<ToysAndGamesService>>();
-
-            var mapper = new Mock<IMapper>();
-
-            mapper.Setup(m => m.Map<IEnumerable<ProductDto>>(It.IsAny<IEnumerable<Product>>()))
-                .Returns(dtos);
-            
-            //If we don't want to use de mock of the mapper
-            /*var config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<MapperConfig>();
-            });
-            var mapper = config.CreateMapper();*/
-
-            var toysAndGamesService = new ToysAndGamesService(dbContextMock.Object, 
-                loggerMock.Object, mapper.Object);
+            var service = _productFixture.CreateProductService();
 
             //Act
-            var products = toysAndGamesService.GetAllProducts();
-            
+            var products = await service.GetAllProducts();
+
             //Assert
+            _testOutputHelper.WriteLine("GetAllProductos");
             Assert.Equal(2, products.Count());
             
         }
 
         [Fact]
-        [Trait("Product", "Negative Testing")]
-        public void GetAllProducts_WithError()
+        [Trait("Product", "Test With Errors")]
+        public async void GetAllProducts_WithError()
         {
-            //Arrange
-            var dbContextMock = new Mock<ToysAndGamesContext>();
-            var loggerMock = new Mock<ILogger<ToysAndGamesService>>();            
+            //Arrange            
             var mapper = new Mock<IMapper>();
 
             mapper.Setup(m => m.Map<IEnumerable<ProductDto>>(It.IsAny<IEnumerable<Product>>()))
-                .Throws(new Exception("Test Exception"));
+                .Throws(new Exception(_productFixture.ErrorMessage));
 
-            var toysAndGamesService = new ToysAndGamesService(dbContextMock.Object, loggerMock.Object, mapper.Object);
+            var service = _productFixture.CreateProductService(mapper.Object);
 
             //Act
-            var products = toysAndGamesService.GetAllProducts();
+            var exception = await Record.ExceptionAsync(async ()=> await service.GetAllProducts());
 
-            //Assert
-            Assert.Empty(products);
-          
+            Assert.NotNull(exception);
+            Assert.Equal(_productFixture.ErrorMessage, exception.Message);
         }
 
         [Fact]
-        public void CreateProduct_WithNoError()
+        public async void CreateProduct_WithNoError()
         {
             //Arrange
             var mockSet = new Mock<DbSet<Product>>();
             var dbContextMock = new Mock<ToysAndGamesContext>();
             dbContextMock.Setup(p => p.Products).Returns(mockSet.Object);
 
-            var loggerMock = new Mock<ILogger<ToysAndGamesService>>();
-            var mapper = new Mock<IMapper>();
+            var loggerMock = new Mock<ILogger<ProductService>>();
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MapperConfig>();
+            });
+            var mapper = config.CreateMapper();
 
-            var toysAndGamesService = new ToysAndGamesService(dbContextMock.Object, 
-                loggerMock.Object, mapper.Object);
+            var toysAndGamesService = new ProductService(dbContextMock.Object,
+                loggerMock.Object, mapper);
 
             //Act
-            var result = toysAndGamesService.CreateProduct(new ProductDto());
+            var result = await toysAndGamesService.CreateProduct(new ProductDto());
 
             //Assert
-            Assert.True(result);
+            Assert.Equal(result, new ProductDto());
             mockSet.Verify(m => m.Add(It.IsAny<Product>()), Times.Once);
             dbContextMock.Verify(m => m.SaveChanges(), Times.Once);
         }
 
         [Fact]
-        [Trait("Product", "Negative Testing")]
-        public void CreateProduct_WithError()
+        [Trait("Product", "Test With Errors")]
+        public async void CreateProduct_WithError()
         {
             //Arrange            
-            var dbContextMock = new Mock<ToysAndGamesContext>();
-
-            var loggerMock = new Mock<ILogger<ToysAndGamesService>>();
-
             var mapper = new Mock<IMapper>();
-            mapper.Setup(m => m.Map<Product>(It.IsAny<ProductDto>())).
-                Throws(new Exception("Test Exception"));
 
-            var toysAndGamesService = new ToysAndGamesService(dbContextMock.Object, 
-                loggerMock.Object, mapper.Object);
+            mapper.Setup(m => m.Map<Product>(It.IsAny<ProductDto>()))
+                .Throws(new Exception(_productFixture.ErrorMessage));
+
+            var service = _productFixture.CreateProductService(mapper.Object);
 
             //Act
-            var result = toysAndGamesService.CreateProduct(new ProductDto());
+            var exception = await Record.ExceptionAsync(async() => await service.CreateProduct(new ProductDto()));
 
             //Assert
-            Assert.False(result);
-            dbContextMock.Verify(m => m.SaveChanges(), Times.Never);
+            Assert.NotNull(exception);
+            Assert.Equal(_productFixture.ErrorMessage, exception.Message);            
         }
 
         [Theory]
         [InlineData(1)]
         [InlineData(2)]
-        public void Delete_Products_Ok(int id)
+        public async void Delete_Products_Ok(int id)
         {
             //Assert
-            var data = new List<Product> { new Product { Id = 1 }, new Product { Id = 2 } };            
-            var dataSet = GetQueryableMockDbSet(data);
-            var dbContextMock = new Mock<ToysAndGamesContext>();
-            dbContextMock.Setup(p => p.Products).ReturnsDbSet(dataSet.Object);            
-
-            var loggerMock = new Mock<ILogger<ToysAndGamesService>>();
-            var mapper = new Mock<IMapper>();
-
-
-            var toysAndGamesService = new ToysAndGamesService(dbContextMock.Object,
-                loggerMock.Object, mapper.Object);
+            var service = _productFixture.CreateProductService();
 
             //Act
-            var result = toysAndGamesService.DeleteProduct(id);
+            var result = await service.DeleteProduct(id);
 
             //Assert
             Assert.True(result);
-            dbContextMock.Verify(m => m.Remove(It.IsAny<Product>()), Times.Once);
-            dbContextMock.Verify(m => m.SaveChanges(), Times.Once);
-        }
-
-        private static Mock<DbSet<T>> GetQueryableMockDbSet<T>(List<T> sourceList) where T : class
-        {
-            var queryable = sourceList.AsQueryable();
-
-            var dbSet = new Mock<DbSet<T>>();
-            dbSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(queryable.Provider);
-            dbSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(queryable.Expression);
-            dbSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
-            dbSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(() => queryable.GetEnumerator());
-            dbSet.Setup(d => d.Add(It.IsAny<T>())).Callback<T>((s) => sourceList.Add(s));            
-
-            return dbSet;
+            //dbContextMock.Verify(m => m.Remove(It.IsAny<Product>()), Times.Once);
+            //dbContextMock.Verify(m => m.SaveChanges(), Times.Once);
         }
     }
 
